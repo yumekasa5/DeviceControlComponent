@@ -10,6 +10,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     // ランプの背景色設定
     ui->portStateLamp->setStyleSheet("background-color : red;");
+    mLogPlainTextEdit = ui->logPlainTextEdit;
+    mLogPlainTextEdit->setReadOnly(true);
+//    mLogListView = ui->logListView;
+//    mLogModel = new QStringListModel(this);
+//    mLogListView->setModel(mLogModel);
+
+
+    this->addLog("Serial Setting");
+    this->addLog(QString("Serial Port:%1").arg(mSerialControl.getPortName()));
 
     // シグナル・スロット接続
     connect(ui->openButton, &QPushButton::clicked,
@@ -35,24 +44,46 @@ void MainWindow::receiveDebug()
     qDebug() << Q_FUNC_INFO;
 }
 
+// LogをGUIに表示
+void MainWindow::addLog(const QString &logtext)
+{
+//    QStringList loglist = mLogModel->stringList();
+//    loglist.append(logtext);
+//    mLogModel->setStringList(loglist);
+
+//    QModelIndex lastindex = mLogModel->index(loglist.size() - 1, 0);
+//    mLogListView->scrollTo(lastindex);
+    mLogPlainTextEdit->appendPlainText(logtext);
+}
+
 void MainWindow::openSerial()
 {
     mSerialControl.SerialOpen();
+    this->addLog("Open Serial.");
 }
 
 void MainWindow::closeSerial()
 {
     mSerialControl.SerialClose();
+    this->addLog("Close Serial.");
 }
 
 void MainWindow::receiveData()
 {
-    mSerialControl.SerialRead();
+    QString revdata = "";
+    mSerialControl.SerialRead(revdata);
+    if(revdata != ""){
+        this->addLog(QString("[%1]:Arduino -> ThisPC").arg(revdata));
+    }else{
+        this->addLog("Recieve No Data");
+    }
+
 }
 
 void MainWindow::checkSerial()
 {
     mSerialControl.SerialCheck();
+    this->addLog("[CHECK]:ThisPC -> Arduino");
 }
 
 void MainWindow::changeStatusColor()

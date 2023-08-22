@@ -9,12 +9,12 @@ SerialControl::SerialControl(QObject *parent)
     mSerial.setParity(QSerialPort::NoParity);
     mSerial.setStopBits(QSerialPort::OneStop);
     mSerial.setFlowControl(QSerialPort::NoFlowControl);
-    qDebug() << "Create SerialControl class\n";
+    qDebug() << "Create SerialControl class";
     qDebug() << mPortName << "\n";
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout,
             this, &SerialControl::checkSerialPortStatus);
-    timer->start(1000);
+    timer->start(500);
 }
 
 bool SerialControl::SerialOpen()
@@ -45,12 +45,13 @@ bool SerialControl::SerialWrite(QString msg)
     return true;
 }
 
-bool SerialControl::SerialRead()
+bool SerialControl::SerialRead(QString &revdata)
 {
 //    bool ret = false;
     mReceivedData = mSerial.readAll();
-    mReceivedDataString = QString::fromUtf8(mReceivedData);
+    mReceivedDataString = QString::fromUtf8(mReceivedData).trimmed();
     qDebug() << "Received data:" << mReceivedDataString;
+    revdata = mReceivedDataString;
     return true;
 }
 
@@ -75,4 +76,9 @@ void SerialControl::checkSerialPortStatus()
 bool SerialControl::getPortStatus()
 {
     return mIsOpen;
+}
+
+QString SerialControl::getPortName()
+{
+    return mPortName;
 }

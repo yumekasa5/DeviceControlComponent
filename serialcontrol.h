@@ -16,10 +16,11 @@ public:
     bool SerialOpen();
     bool SerialClose();
     bool SerialWrite(QString msg);
-    bool SerialRead();
+    bool SerialRead(QString &revdata);
     bool SerialCheck();
     void checkSerialPortStatus();
     bool getPortStatus();
+    QString getPortName();
 
 signals:
     void SIGNAL_checkSerialPortStatus();

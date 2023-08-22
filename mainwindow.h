@@ -1,8 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "serialcontrol.h"
 #include <QMainWindow>
+#include <QListView>
+#include <QStringListModel>
+#include <QPlainTextEdit>
+
+#include "serialcontrol.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,6 +20,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void receiveDebug();
+    void addLog(const QString &logtext);
 
 private slots:
     void openSerial();
@@ -27,5 +32,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     SerialControl mSerialControl;
+//    QListView *mLogListView;
+//    QStringListModel *mLogModel;
+    QPlainTextEdit *mLogPlainTextEdit;
+
 };
 #endif // MAINWINDOW_H
