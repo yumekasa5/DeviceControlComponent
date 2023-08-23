@@ -13,15 +13,19 @@ SOURCES += \
 	main.cpp \
 	mainwindow.cpp \
 	serialcontrol.cpp \
+	servocommand.cpp \
 	watchdogserial.cpp
 
 HEADERS += \
 	mainwindow.h \
 	serialcontrol.h \
+	servocommand.h \
 	watchdogserial.h
 
 FORMS += \
 	mainwindow.ui
+
+VERSION = 1.0.0.0
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

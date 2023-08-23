@@ -8,6 +8,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    QString appname = "ServoCommander ver.1.0.0.0";
+    // アプリ名とバージョンを取得してQLabelに設定
+    QString appName = QCoreApplication::applicationName();
+    QString appVersion = QCoreApplication::applicationVersion();
+    ui->labelAppNameVersion->setText(appName + " ver. " + appVersion);
+
+
     // ランプの背景色設定
     ui->portStateLamp->setStyleSheet("background-color : red;");
     mLogPlainTextEdit = ui->logPlainTextEdit;
@@ -19,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->addLog("Serial Setting");
     this->addLog(QString("Serial Port:%1").arg(mSerialControl.getPortName()));
+    this->addLog(QString("Baudrate:%1").arg(QString::number(mSerialControl.getBaudRate())));
 
     // シグナル・スロット接続
     connect(ui->openButton, &QPushButton::clicked,
@@ -58,14 +66,24 @@ void MainWindow::addLog(const QString &logtext)
 
 void MainWindow::openSerial()
 {
-    mSerialControl.SerialOpen();
-    this->addLog("Open Serial.");
+    bool ret = false;
+    ret = mSerialControl.SerialOpen();
+    if(ret){
+        this->addLog("Serial port opened successfully.");
+    }else{
+        this->addLog("Failed to open serial port.");
+    }
 }
 
 void MainWindow::closeSerial()
 {
-    mSerialControl.SerialClose();
-    this->addLog("Close Serial.");
+    bool ret = false;
+    ret = mSerialControl.SerialClose();
+    if(ret){
+        this->addLog("Serial port closed successfully.");
+    }else{
+        this->addLog("Failed to close the serial port.");
+    }
 }
 
 void MainWindow::receiveData()

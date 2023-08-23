@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="receiveButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>120</y>
+      <x>320</x>
+      <y>160</y>
       <width>93</width>
       <height>29</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="openButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>60</y>
+      <x>320</x>
+      <y>100</y>
       <width>93</width>
       <height>29</height>
      </rect>
@@ -43,8 +43,8 @@
    <widget class="QPushButton" name="closeButton">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>60</y>
+      <x>430</x>
+      <y>100</y>
       <width>93</width>
       <height>29</height>
      </rect>
@@ -56,8 +56,8 @@
    <widget class="QPushButton" name="checkButton">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>120</y>
+      <x>430</x>
+      <y>160</y>
       <width>93</width>
       <height>29</height>
      </rect>
@@ -69,8 +69,8 @@
    <widget class="QLabel" name="portStateLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
+      <x>320</x>
+      <y>60</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -82,8 +82,8 @@
    <widget class="QLabel" name="portStateLamp">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>10</y>
+      <x>460</x>
+      <y>50</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -115,6 +115,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QLabel" name="labelAppNameVersion">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -125,6 +138,12 @@
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuServoCommander_ver_1_0_0_0">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <addaction name="menuServoCommander_ver_1_0_0_0"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

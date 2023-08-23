@@ -4,13 +4,12 @@ SerialControl::SerialControl(QObject *parent)
     : QObject{parent}
 {
     mSerial.setPortName(mPortName);
-    mSerial.setBaudRate(QSerialPort::Baud9600);
+    mSerial.setBaudRate(QSerialPort::Baud115200);
     mSerial.setDataBits(QSerialPort::Data8);
     mSerial.setParity(QSerialPort::NoParity);
     mSerial.setStopBits(QSerialPort::OneStop);
     mSerial.setFlowControl(QSerialPort::NoFlowControl);
-    qDebug() << "Create SerialControl class";
-    qDebug() << mPortName << "\n";
+    mBaudRate = mSerial.baudRate();
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout,
             this, &SerialControl::checkSerialPortStatus);
@@ -21,7 +20,7 @@ bool SerialControl::SerialOpen()
 {
     bool ret = false;
     if(!mSerial.open(QIODevice::ReadWrite)){
-        qDebug() << "Failed to open serial port.";
+        return ret;
     }
     else{
         ret = true;
@@ -32,9 +31,17 @@ bool SerialControl::SerialOpen()
 bool SerialControl::SerialClose()
 {
     bool ret = false;
-    mSerial.close();
-    ret = true;
-    return ret;
+    if (mSerial.isOpen()) {
+        mSerial.close();
+        if (mSerial.isOpen()) {
+            return ret;
+        } else {
+            ret = true;
+            return ret;
+        }
+    } else {
+        return ret;
+    }
 }
 
 bool SerialControl::SerialWrite(QString msg)
@@ -57,9 +64,9 @@ bool SerialControl::SerialRead(QString &revdata)
 
 bool SerialControl::SerialCheck()
 {
-    qDebug() << "Serial Check";
+    bool ret = false;
     mSerial.write("CHECK");
-    return true;
+    return ret;
 }
 
 void SerialControl::checkSerialPortStatus()
@@ -76,6 +83,11 @@ void SerialControl::checkSerialPortStatus()
 bool SerialControl::getPortStatus()
 {
     return mIsOpen;
+}
+
+qint32 SerialControl::getBaudRate()
+{
+    return mBaudRate;
 }
 
 QString SerialControl::getPortName()

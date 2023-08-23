@@ -20,6 +20,7 @@ public:
     bool SerialCheck();
     void checkSerialPortStatus();
     bool getPortStatus();
+    qint32 getBaudRate();
     QString getPortName();
 
 signals:
@@ -31,6 +32,7 @@ private:
     QByteArray mSendData;
     QByteArray mReceivedData;
     QString mReceivedDataString;
+    qint32 mBaudRate;
     bool mIsOpen = false;
 
 };
