@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QString appname = "ServoCommander ver.1.0.0.0";
     // アプリ名とバージョンを取得してQLabelに設定
     QString appName = QCoreApplication::applicationName();
     QString appVersion = QCoreApplication::applicationVersion();
