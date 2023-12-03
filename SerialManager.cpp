@@ -23,7 +23,7 @@ QSerialPort* getSerialPort()
 SerialManager::~SerialManager()
 {
         mSerialPort->close();
-        delete mSerialPort;
+//        delete mSerialPort;
 }
 
 void SerialManager::Initialize()
