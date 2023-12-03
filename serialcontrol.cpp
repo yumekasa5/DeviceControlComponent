@@ -1,15 +1,15 @@
 #include "serialcontrol.h"
 
 SerialControl::SerialControl(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+    mSerial(new QSerialPort(this))
 {
-    mSerial.setPortName(mPortName);
-    mSerial.setBaudRate(QSerialPort::Baud115200);
-    mSerial.setDataBits(QSerialPort::Data8);
-    mSerial.setParity(QSerialPort::NoParity);
-    mSerial.setStopBits(QSerialPort::OneStop);
-    mSerial.setFlowControl(QSerialPort::NoFlowControl);
-    mBaudRate = mSerial.baudRate();
+    mSerial->setPortName(mPortName);
+    mSerial->setBaudRate(mBaudRate);
+    mSerial->setDataBits(QSerialPort::Data8);
+    mSerial->setParity(QSerialPort::NoParity);
+    mSerial->setStopBits(QSerialPort::OneStop);
+    mSerial->setFlowControl(QSerialPort::NoFlowControl);
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout,
             this, &SerialControl::checkSerialPortStatus);
@@ -19,7 +19,7 @@ SerialControl::SerialControl(QObject *parent)
 bool SerialControl::SerialOpen()
 {
     bool ret = false;
-    if(!mSerial.open(QIODevice::ReadWrite)){
+    if(!mSerial->open(QIODevice::ReadWrite)){
         return ret;
     }
     else{
@@ -31,9 +31,9 @@ bool SerialControl::SerialOpen()
 bool SerialControl::SerialClose()
 {
     bool ret = false;
-    if (mSerial.isOpen()) {
-        mSerial.close();
-        if (mSerial.isOpen()) {
+    if (mSerial->isOpen()) {
+        mSerial->close();
+        if (mSerial->isOpen()) {
             return ret;
         } else {
             ret = true;
@@ -47,7 +47,7 @@ bool SerialControl::SerialClose()
 bool SerialControl::SerialWrite(QString msg)
 {
     mSendData = "Hello, Serial";
-    mSerial.write(mSendData);
+    mSerial->write(mSendData);
     qDebug() << "Sent data:" << mSendData;
     return true;
 }
@@ -55,7 +55,7 @@ bool SerialControl::SerialWrite(QString msg)
 bool SerialControl::SerialRead(QString &revdata)
 {
 //    bool ret = false;
-    mReceivedData = mSerial.readAll();
+    mReceivedData = mSerial->readAll();
     mReceivedDataString = QString::fromUtf8(mReceivedData).trimmed();
     qDebug() << "Received data:" << mReceivedDataString;
     revdata = mReceivedDataString;
@@ -65,13 +65,13 @@ bool SerialControl::SerialRead(QString &revdata)
 bool SerialControl::SerialCheck()
 {
     bool ret = false;
-    mSerial.write("CHECK");
+    mSerial->write("CHECK");
     return ret;
 }
 
 void SerialControl::checkSerialPortStatus()
 {
-    if(mSerial.isOpen()){
+    if(mSerial->isOpen()){
         mIsOpen = true;
     }
     else{

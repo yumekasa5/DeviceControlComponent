@@ -7,6 +7,7 @@
 #include <QPlainTextEdit>
 
 #include "serialcontrol.h"
+#include "SerialMonitorWidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,12 +30,16 @@ private slots:
     void checkSerial();
     void changeStatusColor();
 
+    void on_openSerialMonitorButton_clicked();
+    void openSerialMonitorWidget();
+
 private:
     Ui::MainWindow *ui;
     SerialControl mSerialControl;
 //    QListView *mLogListView;
 //    QStringListModel *mLogModel;
     QPlainTextEdit *mLogPlainTextEdit;
+    SerialMonitorWidget* mSerialMonitor;
 
 };
 #endif // MAINWINDOW_H

@@ -27,12 +27,12 @@ signals:
     void SIGNAL_checkSerialPortStatus();
 
 private:
-    QSerialPort mSerial;
+    QSerialPort *mSerial;
     QString mPortName = "COM3";
     QByteArray mSendData;
     QByteArray mReceivedData;
     QString mReceivedDataString;
-    qint32 mBaudRate;
+    QSerialPort::BaudRate mBaudRate = QSerialPort::Baud115200;
     bool mIsOpen = false;
 
 };

@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "serialcontrol.h"
+#include "SerialMonitorWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    mSerialMonitor(new SerialMonitorWidget)
 {
     ui->setupUi(this);
 
@@ -38,6 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::checkSerial);
     connect(&mSerialControl, &SerialControl::SIGNAL_checkSerialPortStatus,
             this, &MainWindow::changeStatusColor);
+
+    connect(ui->openSerialMonitorButton, SIGNAL(clicked()), this, SLOT(on_openSerialMonitorButton_clicked()));
+
 }
 
 MainWindow::~MainWindow()
@@ -110,5 +115,18 @@ void MainWindow::changeStatusColor()
     }else{
         ui->portStateLamp->setStyleSheet("background-color : red;");
     }
+}
+
+// SerialMonitorを生成する関数
+void MainWindow::openSerialMonitorWidget()
+{
+    // Widgetの表示
+    mSerialMonitor->show();
+
+}
+
+void MainWindow::on_openSerialMonitorButton_clicked()
+{
+    openSerialMonitorWidget();
 }
 
