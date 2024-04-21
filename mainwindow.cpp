@@ -1,52 +1,38 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "serialcontrol.h"
+//#include "serialcontrol.h"
 #include "SerialMonitorWidget.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent),
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
     ui(new Ui::MainWindow),
-    mSerialMonitor(new SerialMonitorWidget)
+    mSerialControl(new SerialControl(this))
+//    mSerialMonitor(new SerialMonitorWidget)
 {
     ui->setupUi(this);
 
-    // アプリ名とバージョンを取得してQLabelに設定
+    //! アプリ名とバージョンを取得してQLabelに設定
     QString appName = QCoreApplication::applicationName();
     QString appVersion = QCoreApplication::applicationVersion();
     ui->labelAppNameVersion->setText(appName + " ver. " + appVersion);
 
+    if(mSerialControl->openSerialPort()){
+        connect(mSerialControl, &SerialControl::readyRead, this, &MainWindow::printData);
+        qDebug() << "Serial port opened successfully.";
+    }else{
+        qDebug() << "Couldn't open ther port COM3";
+    }
 
     // ランプの背景色設定
     ui->portStateLamp->setStyleSheet("background-color : red;");
     mLogPlainTextEdit = ui->logPlainTextEdit;
     mLogPlainTextEdit->setReadOnly(true);
-//    mLogListView = ui->logListView;
-//    mLogModel = new QStringListModel(this);
-//    mLogListView->setModel(mLogModel);
-
-
-    this->addLog("Serial Setting");
-    this->addLog(QString("Serial Port:%1").arg(mSerialControl.getPortName()));
-    this->addLog(QString("Baudrate:%1").arg(QString::number(mSerialControl.getBaudRate())));
-
-    // シグナル・スロット接続
-    connect(ui->openButton, &QPushButton::clicked,
-            this, &MainWindow::openSerial);
-    connect(ui->closeButton, &QPushButton::clicked,
-            this, &MainWindow::closeSerial);
-    connect(ui->receiveButton, &QPushButton::clicked,
-            this, &MainWindow::receiveData);
-    connect(ui->checkButton, &QPushButton::clicked,
-            this, &MainWindow::checkSerial);
-    connect(&mSerialControl, &SerialControl::SIGNAL_checkSerialPortStatus,
-            this, &MainWindow::changeStatusColor);
-
-    connect(ui->openSerialMonitorButton, SIGNAL(clicked()), this, SLOT(on_openSerialMonitorButton_clicked()));
-
 }
 
 MainWindow::~MainWindow()
 {
+    delete mSerialControl;
+    disconnect(mSerialPort, &QSerialPort::readyRead, this, &MainWindow::printData);
     delete ui;
 }
 
@@ -68,65 +54,50 @@ void MainWindow::addLog(const QString &logtext)
     mLogPlainTextEdit->appendPlainText(logtext);
 }
 
-void MainWindow::openSerial()
-{
-    bool ret = false;
-    ret = mSerialControl.SerialOpen();
-    if(ret){
-        this->addLog("Serial port opened successfully.");
-    }else{
-        this->addLog("Failed to open serial port.");
-    }
-}
-
-void MainWindow::closeSerial()
-{
-    bool ret = false;
-    ret = mSerialControl.SerialClose();
-    if(ret){
-        this->addLog("Serial port closed successfully.");
-    }else{
-        this->addLog("Failed to close the serial port.");
-    }
-}
-
 void MainWindow::receiveData()
 {
-    QString revdata = "";
-    mSerialControl.SerialRead(revdata);
-    if(revdata != ""){
-        this->addLog(QString("[%1]:Arduino -> ThisPC").arg(revdata));
-    }else{
-        this->addLog("Recieve No Data");
-    }
+//    QString revdata = "";
+//    mSerialControl->SerialRead(revdata);
+//    if(revdata != ""){
+//        this->addLog(QString("[%1]:Arduino -> ThisPC").arg(revdata));
+//    }else{
+//        this->addLog("Recieve No Data");
+//    }
 
 }
 
 void MainWindow::checkSerial()
 {
-    mSerialControl.SerialCheck();
-    this->addLog("[CHECK]:ThisPC -> Arduino");
+//    mSerialControl->SerialCheck();
+//    this->addLog("[CHECK]:ThisPC -> Arduino");
 }
 
 void MainWindow::changeStatusColor()
 {
-    if(mSerialControl.getPortStatus()){
-        ui->portStateLamp->setStyleSheet("background-color : green;");
-    }else{
-        ui->portStateLamp->setStyleSheet("background-color : red;");
-    }
+//    if(mSerialPort->getPortStatus()){
+//        ui->portStateLamp->setStyleSheet("background-color : green;");
+//    }else{
+//        ui->portStateLamp->setStyleSheet("background-color : red;");
+//    }
 }
 
 // SerialMonitorを生成する関数
 void MainWindow::openSerialMonitorWidget()
 {
     // Widgetの表示
-    mSerialMonitor->show();
+//    mSerialMonitor->show();
 
 }
 
 void MainWindow::on_openSerialMonitorButton_clicked()
 {
-    openSerialMonitorWidget();
+//    openSerialMonitorWidget();
 }
 
+
+void MainWindow::printData()
+{
+    mSerialControl->readSerialData(str_buff);
+    ui->textEdit->append(str_buff);
+    str_buff.clear();
+}

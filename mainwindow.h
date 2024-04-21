@@ -5,6 +5,7 @@
 #include <QListView>
 #include <QStringListModel>
 #include <QPlainTextEdit>
+#include <QSerialPort>
 
 #include "serialcontrol.h"
 #include "SerialMonitorWidget.h"
@@ -24,22 +25,27 @@ public:
     void addLog(const QString &logtext);
 
 private slots:
-    void openSerial();
-    void closeSerial();
     void receiveData();
     void checkSerial();
     void changeStatusColor();
+    void printData();
 
     void on_openSerialMonitorButton_clicked();
     void openSerialMonitorWidget();
 
 private:
     Ui::MainWindow *ui;
-    SerialControl mSerialControl;
+
+    QSerialPort *mSerialPort;
+    SerialControl *mSerialControl;
 //    QListView *mLogListView;
 //    QStringListModel *mLogModel;
     QPlainTextEdit *mLogPlainTextEdit;
-    SerialMonitorWidget* mSerialMonitor;
+//    SerialMonitorWidget* mSerialMonitor;
+
+    bool mStatus = false;
+    QString str_buff = "";
+
 
 };
 #endif // MAINWINDOW_H

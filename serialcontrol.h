@@ -13,27 +13,33 @@ class SerialControl : public QObject
     Q_OBJECT
 public:
     explicit SerialControl(QObject *parent = nullptr);
-    bool SerialOpen();
-    bool SerialClose();
+    ~SerialControl();
+    bool openSerialPort();
+    bool closeSerialPort();
+    void setSerialSettiing();
     bool SerialWrite(QString msg);
-    bool SerialRead(QString &revdata);
+    void readSerialData(QString &data);
+
     bool SerialCheck();
     void checkSerialPortStatus();
     bool getPortStatus();
     qint32 getBaudRate();
     QString getPortName();
 
+public slots:
+    void readyRead();
+
 signals:
     void SIGNAL_checkSerialPortStatus();
 
 private:
     QSerialPort *mSerial;
-    QString mPortName = "COM3";
+    QString mPortName;
     QByteArray mSendData;
     QByteArray mReceivedData;
     QString mReceivedDataString;
     QSerialPort::BaudRate mBaudRate = QSerialPort::Baud115200;
-    bool mIsOpen = false;
+    bool mIsOpen;
 
 };
 

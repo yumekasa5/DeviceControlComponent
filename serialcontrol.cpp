@@ -1,34 +1,44 @@
 #include "serialcontrol.h"
 
-SerialControl::SerialControl(QObject *parent)
-    : QObject{parent},
+SerialControl::SerialControl(QObject *parent) :
+    QObject{parent},
     mSerial(new QSerialPort(this))
 {
-    mSerial->setPortName(mPortName);
-    mSerial->setBaudRate(mBaudRate);
-    mSerial->setDataBits(QSerialPort::Data8);
-    mSerial->setParity(QSerialPort::NoParity);
-    mSerial->setStopBits(QSerialPort::OneStop);
-    mSerial->setFlowControl(QSerialPort::NoFlowControl);
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout,
-            this, &SerialControl::checkSerialPortStatus);
-    timer->start(500);
+    mPortName = "COM3";
+    mIsOpen = false;
+    //! 接続可能なSerialPort情報をデバッグ表示
+    foreach (const QSerialPortInfo info, QSerialPortInfo::availablePorts()) {
+        qDebug() << "Name        :" << info.portName();
+        qDebug() << "Description :" << info.description();
+        qDebug() << "Manufacturer:" << info.manufacturer() << "\n";
+    }
+    setSerialSettiing();
+
+    //! TODO:
+//    QTimer *timer = new QTimer(this);
+//    connect(timer, &QTimer::timeout,
+//            this, &SerialControl::checkSerialPortStatus);
+//    timer->start(500);
 }
 
-bool SerialControl::SerialOpen()
+SerialControl::~SerialControl()
 {
-    bool ret = false;
-    if(!mSerial->open(QIODevice::ReadWrite)){
+    mSerial->close();
+}
+
+bool SerialControl::openSerialPort()
+{
+    bool ret = true;
+    if(mSerial->open(QIODevice::ReadWrite)){
         return ret;
     }
     else{
-        ret = true;
+        ret = false;
+        return ret;
     }
-    return ret;
 }
 
-bool SerialControl::SerialClose()
+bool SerialControl::closeSerialPort()
 {
     bool ret = false;
     if (mSerial->isOpen()) {
@@ -44,6 +54,17 @@ bool SerialControl::SerialClose()
     }
 }
 
+void SerialControl::setSerialSettiing()
+{
+    //! SerialPortの設定
+    mSerial->setPortName(mPortName);
+    mSerial->setBaudRate(mBaudRate);
+    mSerial->setDataBits(QSerialPort::Data8);
+    mSerial->setParity(QSerialPort::NoParity);
+    mSerial->setStopBits(QSerialPort::OneStop);
+    mSerial->setFlowControl(QSerialPort::NoFlowControl);
+}
+
 bool SerialControl::SerialWrite(QString msg)
 {
     mSendData = "Hello, Serial";
@@ -52,14 +73,16 @@ bool SerialControl::SerialWrite(QString msg)
     return true;
 }
 
-bool SerialControl::SerialRead(QString &revdata)
+void SerialControl::readSerialData(QString &data)
 {
-//    bool ret = false;
-    mReceivedData = mSerial->readAll();
-    mReceivedDataString = QString::fromUtf8(mReceivedData).trimmed();
-    qDebug() << "Received data:" << mReceivedDataString;
-    revdata = mReceivedDataString;
-    return true;
+    if (sender() == mSerial){
+        data = QString(mSerial->readAll());
+    }
+}
+
+void SerialControl::readyRead()
+{
+    mSerial->readyRead();
 }
 
 bool SerialControl::SerialCheck()

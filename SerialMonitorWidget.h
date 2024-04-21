@@ -3,11 +3,6 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
-
-#include "serialcontrol.h"
-#include "SerialManager.h"
 
 namespace Ui {
 class SerialMonitorWidget;
@@ -26,9 +21,6 @@ public:
 
 private:
     Ui::SerialMonitorWidget *ui;
-    SerialManager *mSerialManager;
-    QSerialPort *mSerialPort;
-    SerialControl *mSerial;
 };
 
 #endif // SERIALMONITORWIDGET_H

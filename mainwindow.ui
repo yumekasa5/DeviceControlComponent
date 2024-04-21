@@ -14,19 +14,6 @@
    <string>ServoControlWindow </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="receiveButton">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>160</y>
-      <width>93</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Receive</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="openButton">
     <property name="geometry">
      <rect>
@@ -51,19 +38,6 @@
     </property>
     <property name="text">
      <string>Close</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="checkButton">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>160</y>
-      <width>93</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Check</string>
     </property>
    </widget>
    <widget class="QLabel" name="portStateLabel">
@@ -118,8 +92,8 @@
    <widget class="QLabel" name="labelAppNameVersion">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>20</x>
+      <y>10</y>
       <width>181</width>
       <height>20</height>
      </rect>
@@ -131,8 +105,8 @@
    <widget class="QPushButton" name="openSerialMonitorButton">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>320</y>
+      <x>10</x>
+      <y>40</y>
       <width>121</width>
       <height>29</height>
      </rect>
@@ -140,6 +114,55 @@
     <property name="text">
      <string>Serial Monitor</string>
     </property>
+   </widget>
+   <widget class="QTextEdit" name="textEdit">
+    <property name="geometry">
+     <rect>
+      <x>23</x>
+      <y>70</y>
+      <width>281</width>
+      <height>481</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>150</y>
+      <width>111</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Command</string>
+    </property>
+    <widget class="QPushButton" name="receiveButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>93</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Receive</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="checkButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>93</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Check</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
